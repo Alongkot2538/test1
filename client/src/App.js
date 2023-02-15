@@ -12,6 +12,13 @@ function App() {
   const [date, setDate] = useState(0);
   const [id, setId] = useState(0);
     const [customerList, setCustomerList] = useState([]);
+    const [newFirstname, setNewFirstname] = useState(0);
+    const [newLastname, setNewLastname] = useState(0);
+    const [newAddress, setNewAddress] = useState(0);
+    const [newCardid, setNewCardid] = useState(0);
+    const [newGender, setNewGenger ] = useState(0);
+    const [newDate, setNewDate ] = useState(0);
+
 
   const getCustomer = () => {
     Axios.get("http://localhost:3001/customer").then((response) => {
@@ -20,7 +27,7 @@ function App() {
   };
 
   const addCustomer = () => {
-    Axios.post("http://localhost:3001/create", {
+    Axios.post("http://localhost:3000/create", {
       firstname: "firstname",
       lastname: "lastname",
       address: "address",
@@ -45,6 +52,29 @@ function App() {
     });
   };
 
+  const updateCustomer = (id) => {
+    Axios.put("http://localhost:3001/update", { firstname: newFirstname, lastname: newLastname,address: newAddress,cardid: newCardid,gender: newGender,date: newDate, id: id }).then(
+      (response) => {
+        setCustomerList(
+          customerList.map((val) => {
+            return val.id == id
+              ? {
+                  id: val.id,
+                  firstname: val.newFirstname,
+                  lastname: val.newLastname,
+                  address: val.newAddress,
+                  cardid: val.newCardid,
+                  gender: val.newGender,
+                  date: val.newDate,
+          
+                }
+              : val;
+          })
+        );
+      }
+    );
+  };
+
 
 
   const deleteCustomer = (id) => {
@@ -64,7 +94,7 @@ function App() {
         <form action="">
 
           <div className="mb-3">
-            <label className="form-label" htmlFor="Firstname">
+            <label className="form-label" htmlFor="firstname">
             FirstName:
             </label>
             <input
@@ -78,8 +108,7 @@ function App() {
           </div>
 
           <div className="mb-3">
-            <label htmlFor="Lastname">LastName:</label>
-           
+            <label htmlFor="lastname">LastName:</label>
             <input
               type="text"
               className="form-control"
@@ -91,7 +120,7 @@ function App() {
           </div>
 
           <div className="mb-3">
-            <label htmlFor="Address">Address:</label>
+            <label htmlFor="address">Address:</label>
             <input
               type="text"
               className="form-control"
@@ -103,7 +132,7 @@ function App() {
           </div>
 
           <div className="mb-3">
-            <label htmlFor="Card ID">Card ID:</label>
+            <label htmlFor="cardid">Card ID:</label>
             <input
               type="text"
               className="form-control"
@@ -115,7 +144,7 @@ function App() {
           </div>
 
           <div className="mb-3">
-            <label htmlFor="Gender">Gender:</label>
+            <label htmlFor="gender">Gender:</label>
             <input
               type="text"
               className="form-control"
@@ -127,9 +156,9 @@ function App() {
           </div>
 
           <div className="mb-3">
-            <label htmlFor="Date">Date:</label>
+            <label htmlFor="date">Date:</label>
             <input
-              type="text"
+              type="date"
               className="form-control"
               placeholder="Date"
               onChange={(event) => {
@@ -139,11 +168,11 @@ function App() {
           </div>
 
           <div className="mb-3">
-            <label htmlFor="customer id">customer id:</label>
+            <label htmlFor="id">customer id:</label>
             <input
               type="text"
               className="form-control"
-              placeholder="customer id"
+              placeholder="Customer id"
               onChange={(event) => {
                 setId(event.target.value)
               }}
@@ -177,8 +206,63 @@ function App() {
                 <p className="card-text">Date: {val.cs_date}</p>
                 <p className="card-text">customer id: {val.cs_id}</p>
                 <div className="d-flex">
+                <input
+                    className="form-control"
+                    style={{ width: "300px" }}
+                    type="text"
+                    placeholder="firstname."
+                    onChange={(event) => {
+                      setNewFirstname(event.target.value)
+                    }}
+                  />
+                  
+                  <input
+                    className="form-control"
+                    style={{ width: "300px" }}
+                    type="text"
+                    placeholder="Lastname"
+                    onChange={(event) => {
+                      setNewLastname(event.target.value)
+                    }}
+                  />
+                  <input
+                    className="form-control"
+                    style={{ width: "300px" }}
+                    type="text"
+                    placeholder="Address"
+                    onChange={(event) => {
+                      setNewAddress(event.target.value)
+                    }}
+                  />
+                  <input
+                    className="form-control"
+                    style={{ width: "300px" }}
+                    type="text"
+                    placeholder="Card id"
+                    onChange={(event) => {
+                      setNewCardid(event.target.value)
+                    }}
+                  />
+                  <input
+                    className="form-control"
+                    style={{ width: "300px" }}
+                    type="text"
+                    placeholder="Gender."
+                    onChange={(event) => {
+                      setNewGenger(event.target.value)
+                    }}
+                  />
+                  <input
+                    className="form-control"
+                    style={{ width: "300px" }}
+                    type="date"
+                    placeholder="Date."
+                    onChange={(event) => {
+                      setNewDate(event.target.value)
+                    }}
+                  />
           
-
+                  <button className="btn btn-warning" onClick={() => {updateCustomer(val.id)}}>Update</button>
                   <button className="btn btn-danger" onClick={() => {deleteCustomer(val.id)}}>Delete</button>
                 </div>
               </div>
